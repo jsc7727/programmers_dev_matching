@@ -27,9 +27,7 @@ function index({ $target }) {
       }));
       localStorage.setItem("cardStatus", JSON.stringify(cardStatus));
     }
-    const personalInfo = JSON.parse(localStorage.getItem("personalInfo"));
-    const cardStatus = JSON.parse(localStorage.getItem("cardStatus"));
-    this.state.pages.homePage.setState({ personalInfo, cardStatus });
+    this.rerender();
   };
 
   this.render = (url) => {
@@ -61,12 +59,6 @@ function index({ $target }) {
     initialState: {
       personalInfo: [],
       cardStatus: [],
-    },
-    onClickHandler: (idx) => {
-      const cardStatus = JSON.parse(localStorage.getItem("cardStatus"));
-      cardStatus[idx].status =
-        cardStatus[idx].status === "card" ? "card is-flipped" : "card";
-      localStorage.setItem("cardStatus", JSON.stringify(cardStatus));
     },
   });
 

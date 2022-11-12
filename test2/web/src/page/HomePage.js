@@ -1,6 +1,6 @@
 import ContentTitle from "./../components/ContentTitle.js";
 
-function HomePage({ $target, initialState, onClickHandler }) {
+function HomePage({ $target }) {
   this.$main = document.createElement("main");
   this.$main.id = "page_content";
 
@@ -8,24 +8,15 @@ function HomePage({ $target, initialState, onClickHandler }) {
     $target: this.$main,
     title: "CardView",
   });
-  console.log("check", this.$main);
-  console.log("check", $target);
 
   this.$cards_container = document.createElement("div");
   this.$cards_container.id = "cards_container";
   this.$main.append(this.$cards_container);
 
-  this.state = initialState;
-
-  this.setState = (newState) => {
-    this.state = { ...this.state, ...newState };
-    console.log(this.state);
-    this.render();
-  };
-
   this.render = async () => {
     $target.append(this.$main);
-    const { personalInfo, cardStatus } = this.state;
+    const personalInfo = JSON.parse(localStorage.getItem("personalInfo"));
+    const cardStatus = JSON.parse(localStorage.getItem("cardStatus"));
     this.$cards_container.innerHTML = `
       ${personalInfo
         .map((card) => {
@@ -42,8 +33,12 @@ function HomePage({ $target, initialState, onClickHandler }) {
     `;
   };
   this.$cards_container.addEventListener("click", (e) => {
-    console.log(e.target.parentNode.classList.toggle("is-flipped"));
-    onClickHandler(e.target.parentNode.getAttribute("idx"));
+    const idx = e.target.parentNode.getAttribute("idx");
+    const cardStatus = JSON.parse(localStorage.getItem("cardStatus"));
+    cardStatus[idx].status =
+      cardStatus[idx].status === "card" ? "card is-flipped" : "card";
+    localStorage.setItem("cardStatus", JSON.stringify(cardStatus));
+    e.target.parentNode.classList.toggle("is-flipped");
   });
 }
 export default HomePage;

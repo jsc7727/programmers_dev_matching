@@ -118,6 +118,8 @@ header {
   border-radius: 1rem;
   box-sizing: border-box;
   background: none;
+  font-size: 1em;
+  color: #5a5c66;
 }
 
 .form_elem select {
@@ -127,6 +129,8 @@ header {
   border-radius: 1rem;
   box-sizing: border-box;
   background: none;
+  font-size: 1em;
+  color: #5a5c66;
 }
 
 .form_elem button {
@@ -136,7 +140,14 @@ header {
   border-radius: 1rem;
   box-sizing: border-box;
   background: #dedede;
-  
+  font-size: 1em;
+  background: #29323c;
+  color: white;
+  cursor: pointer;
+}
+
+.form_elem button:hover {
+  background: #637488;
 }
 
 label {
