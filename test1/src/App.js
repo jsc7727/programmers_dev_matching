@@ -8,15 +8,36 @@ export default function App({ $target }) {
   this.state = {
     fetchedLanguages: [],
     selectedLanguages: [],
+    selectedIndex: 0,
   };
   const selectedLanguage = new SelectedLanguage({
     $target,
     initialState: { selectedLanguages: [] },
   });
 
-  this.onChangeHandler = async (text) => {
-    this.state.fetchedLanguages = await getSearchedLanguages(text);
-    suggestion.setState({ fetchedLanguages: this.state.fetchedLanguages });
+  this.onChangeHandler = async (text, key) => {
+    console.log("key", text, key);
+    if (key === "ArrowUp" || key === "ArrowDown") {
+      if (key === "ArrowUp") {
+        this.state.selectedIndex =
+          this.state.selectedIndex === 0
+            ? this.state.fetchedLanguages.length - 1
+            : this.state.selectedIndex - 1;
+      } else if (key === "ArrowDown") {
+        this.state.selectedIndex =
+          this.state.selectedIndex === this.state.fetchedLanguages.length - 1
+            ? 0
+            : this.state.selectedIndex + 1;
+      }
+      suggestion.setState({ selectedIndex: this.state.selectedIndex });
+    } else {
+      this.state.selectedIndex = 0;
+      this.state.fetchedLanguages = await getSearchedLanguages(text);
+    }
+    suggestion.setState({
+      selectedIndex: this.state.selectedIndex,
+      fetchedLanguages: this.state.fetchedLanguages,
+    });
   };
 
   this.onClickHandler = (fetchedLanguagesIndex) => {
@@ -44,7 +65,7 @@ export default function App({ $target }) {
 
   const suggestion = new Suggestion({
     $target,
-    initialState: { fetchedLanguages: [] },
+    initialState: { fetchedLanguages: [], selectedIndex: 0 },
     onClick: this.onClickHandler,
   });
   this.setState = (newState) => {};

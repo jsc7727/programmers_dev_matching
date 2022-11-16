@@ -1,35 +1,43 @@
 export default function Suggestion({ $target, initialState, onClick }) {
-  const $div = document.createElement("div");
-  $div.className = "Suggestion";
-  $target.append($div);
+  this.$div = document.createElement("div");
+  this.$div.className = "Suggestion";
+  $target.append(this.$div);
 
   this.state = initialState;
 
   this.setState = (newState) => {
-    this.state = newState;
+    this.state = {
+      ...this.state,
+      ...newState,
+    };
     this.render();
   };
 
   this.render = () => {
-    $div.style.display = "block";
-    const { fetchedLanguages = [] } = this.state;
+    this.$div.style.display = "block";
+    const { fetchedLanguages = [], selectedIndex = 0 } = this.state;
     if (fetchedLanguages.length > 0) {
-      console.log(fetchedLanguages);
-      $div.innerHTML = `<ul>
+      this.$div.innerHTML = `<ul>
               ${fetchedLanguages
                 .map((language, index) => {
-                  return `<li data-index=${index}>${language}</li>`;
+                  const selectedClass =
+                    selectedIndex === index ? "Suggestion__item--selected" : "";
+                  return `<li class="${selectedClass}" data-index="${index}">${language}</li>`;
                 })
                 .join("")}
           </ul>`;
     } else {
-      $div.style.display = "none";
+      this.$div.style.display = "none";
     }
   };
 
-  $div.addEventListener("click", (e) => {
+  this.$div.addEventListener("click", (e) => {
     const $li = e.target.closest("li");
-    onClick($li.getAttribute("data-index"));
+    onClick($li.dataset.index);
+  });
+
+  this.$div.addEventListener("keyup", (e) => {
+    console.log("suggestion", e.target);
   });
 
   this.render();
